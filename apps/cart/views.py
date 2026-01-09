@@ -1,3 +1,6 @@
+import random
+import string
+
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -19,17 +22,11 @@ def handle_cart(request):
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
             if created:
-                import random
-                import string
-
                 cart.cart_code = "".join(
                     random.choices(string.ascii_letters + string.digits, k=11)
                 )
                 cart.save()
         else:
-            import random
-            import string
-
             cart_code = "".join(
                 random.choices(string.ascii_letters + string.digits, k=11)
             )
@@ -57,9 +54,7 @@ def handle_cart(request):
                 cart = Cart.objects.filter(user=request.user).first()
                 if not cart:
                     cart = Cart.objects.create(user=request.user)
-                    import random
-                    import string
-
+        
                     cart.cart_code = "".join(
                         random.choices(string.ascii_letters + string.digits, k=11)
                     )
@@ -190,13 +185,8 @@ def delete_cartitem(request, pk):
 @permission_classes([IsAuthenticated])
 def merge_carts(request):
     try:
-        # Get the user cart
         user_cart, created = Cart.objects.get_or_create(user=request.user)
         if created:
-            # Generate an unique code for cart
-            import random
-            import string
-
             user_cart.cart_code = "".join(
                 random.choices(string.ascii_letters + string.digits, k=11)
             )
